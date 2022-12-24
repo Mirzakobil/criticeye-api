@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  authorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   resourceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Resource' },
   reviewPhotoLink: [
     {
@@ -9,6 +9,14 @@ const reviewSchema = new mongoose.Schema({
     },
   ],
   name: {
+    type: String,
+    required: true,
+  },
+  resourceName: {
+    type: String,
+    required: true,
+  },
+  resourceType: {
     type: String,
     required: true,
   },
@@ -20,15 +28,31 @@ const reviewSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  rating: {
+  ratingAll: [
+    {
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      rating: { type: Number },
+    },
+  ],
+  ratingAvr: {
     type: Number,
     default: 0,
   },
+  likesAll: [
+    {
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    },
+  ],
   likes: {
     type: Number,
     default: 0,
   },
-  tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tags' }],
+  tags: [
+    {
+      type: String,
+    },
+  ],
+  tagId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tags' }],
 });
 
 module.exports = mongoose.model('Review', reviewSchema);
