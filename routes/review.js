@@ -52,36 +52,25 @@ router.post('/api/review/like', async (req, res) => {
     const userId = req.body.userId;
     const reviewId = req.body.reviewId;
     const review = await Review.findById(reviewId);
-
-    review.likes++;
-
-    const likeData = {
-      userId,
-    };
-
-    review.likesAll.push(likeData);
-
-    await review.save();
-
-    return res.status(202).json(review);
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json(err);
-  }
-});
-//review remove like
-router.post('/api/review/unlike', async (req, res) => {
-  try {
-    const userId = req.body.userId;
-    const reviewId = req.body.reviewId;
-    const review = await Review.findById(reviewId);
-
-    review.likes--;
-
-    review.likesAll = review.likesAll.filter(
-      (item) => item.userId.toString() !== userId
+    const alreadyLiked = review.likesAll.find(
+      (r) => r.userId.toString() === userId
     );
-    console.log(review.likesAll);
+
+    if (alreadyLiked) {
+      review.likes--;
+
+      review.likesAll = review.likesAll.filter(
+        (item) => item.userId.toString() !== userId
+      );
+    } else {
+      review.likes++;
+      const likeData = {
+        userId,
+      };
+
+      review.likesAll.push(likeData);
+    }
+
     await review.save();
 
     return res.status(202).json(review);
@@ -108,6 +97,31 @@ router.post('/api/review/comment', async (req, res) => {
     return res.status(500).json(err);
   }
 });
+
+//get all user's comments
+router.get('/api/comment/getall/user/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const comments = await Comment.find({ userId: userId });
+    return res.status(202).json(comments);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+//get all review comments
+router.get('/api/comment/getall/review/:reviewId', async (req, res) => {
+  try {
+    const reviewId = req.params.reviewId;
+    const comment = await Comment.find({ reviewId });
+    return res.status(202).json(comment);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
 //get all resource reviews
 router.get('/api/review/getall/resource/:resourceId', async (req, res) => {
   try {

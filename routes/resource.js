@@ -5,6 +5,7 @@ const Resource = require('../models/resources');
 const Rating = require('../models/rating');
 const Review = require('../models/reviews');
 
+//create resource
 router.post('/api/resource/create', async (req, res) => {
   try {
     const resource = await Resource.create({
@@ -18,6 +19,8 @@ router.post('/api/resource/create', async (req, res) => {
     return res.status(500).json(err);
   }
 });
+
+//resource rating by user
 router.post('/api/resource/addUserRating', async (req, res) => {
   try {
     const resourceId = req.body.resourceId;
@@ -25,6 +28,18 @@ router.post('/api/resource/addUserRating', async (req, res) => {
     const rating = req.body.rating;
     const reviewId = req.body.reviewId;
     const resource = await Resource.findById(resourceId);
+    const ratings = await Rating.find();
+    const alreadyRatedUserId = ratings.find(
+      (r) => r.userId.toString() === userId
+    );
+
+    const alreadyRatedResourceId = ratings.find(
+      (r) => r.resourceId.toString() === resourceId
+    );
+
+    if (alreadyRatedResourceId && alreadyRatedUserId) {
+      return res.status(400).json('Resource alredy rated by current User');
+    }
     const ratingData = await Rating.create({
       userId: userId,
       resourceId: resourceId,
@@ -42,8 +57,7 @@ router.post('/api/resource/addUserRating', async (req, res) => {
       userId,
       rating,
     };
-    console.log(review);
-    console.log(revRating);
+
     review.ratingAll.push(revRating);
 
     await resource.save();
