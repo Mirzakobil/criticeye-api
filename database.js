@@ -11,6 +11,4 @@ const db = mongoose.connect(
   { useUnifiedTopology: true, useNewUrlParser: true }
 );
 
-module.exports = {
-  db,
-};
+module.export = db;

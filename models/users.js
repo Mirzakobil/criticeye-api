@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      default: '0',
     },
     role: String,
     firstName: {
@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema(
     },
     profilePhotoLink: {
       type: String,
+      default: '',
     },
     role: {
       type: String,
