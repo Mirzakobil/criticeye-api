@@ -38,7 +38,7 @@ router.post('/api/resource/addUserRating', async (req, res) => {
     );
 
     if (alreadyRatedResourceId && alreadyRatedUserId) {
-      return res.status(400).json('Resource alredy rated by current User');
+      return res.status(400).json('Resource already rated by current User');
     }
     const ratingData = await Rating.create({
       userId: userId,

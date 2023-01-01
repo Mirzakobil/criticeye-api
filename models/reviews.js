@@ -53,6 +53,10 @@ const reviewSchema = new mongoose.Schema(
         type: String,
       },
     ],
+    views: {
+      type: Number,
+      default: 0,
+    },
     tagId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tags' }],
   },
   {

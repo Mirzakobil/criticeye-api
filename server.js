@@ -25,7 +25,7 @@ const tag = require('./routes/tags');
 const review = require('./routes/review');
 const logIn = require('./routes/login');
 require('./database');
-require('./middlewares/auth');
+const auth = require('./middlewares/auth');
 const logger = (req, res, next) => {
   console.log(
     `${new Date().toString()} - ${req.method} ${req.path} ${req.originalUrl}`
@@ -43,7 +43,7 @@ app.use(logIn);
 app.use(registerUser);
 app.use(resource);
 app.use(tag);
-app.use(review);
+app.use('/rev', review);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

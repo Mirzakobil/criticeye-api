@@ -157,6 +157,20 @@ router.get('/api/review/getall/', async (req, res) => {
   }
 });
 
+//get one review by id
+router.get('/review/:reviewId', async (req, res) => {
+  try {
+    const reviewId = req.params.reviewId;
+    const review = await Review.findById(reviewId);
+    review.views++;
+    review.save();
+    return res.status(202).json(review);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
 //get all tag reviews
 router.get('/api/review/getall/tag/:tagId', async (req, res) => {
   try {

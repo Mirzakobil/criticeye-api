@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema(
   {
@@ -9,7 +10,7 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      default: '0',
+      default: bcrypt.hash('0', 10),
     },
     role: String,
     firstName: {
