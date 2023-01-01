@@ -12,12 +12,15 @@ app.use(
     secret: 'somethingsecretgoeshere',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
+    cookie: { secure: false },
   })
 );
 
-const PORT = process.env.PORT || 5000;
 const passport = require('passport');
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(passport.authenticate('session'));
+const PORT = process.env.PORT || 5000;
 
 const registerUser = require('./routes/registerUser');
 const resource = require('./routes/resource');
@@ -32,11 +35,15 @@ const logger = (req, res, next) => {
   );
   next();
 };
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(passport.authenticate('session'));
+
 app.use(logger);
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(logIn);

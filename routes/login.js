@@ -6,6 +6,16 @@ const ms = require('ms');
 
 const data = require('../services/userData');
 
+router.get('/login/success', (req, res) => {
+  console.log(req.user);
+  if (req.user) {
+    res.status(200).json({
+      success: true,
+      message: 'successfull',
+      user: req.user,
+    });
+  }
+});
 router.post('/api/login', async (req, res) => {
   const user = await data.loginUser(req.body.email, req.body.password);
 
@@ -41,8 +51,8 @@ router.get(
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
     // Successful authentication, redirect home.
-    console.log('login');
-    res.redirect('http://localhost:3000/dashboard');
+    //console.log(req.user);
+    res.redirect('http://localhost:3000/');
   }
 );
 router.get(
@@ -57,7 +67,6 @@ router.get(
   }),
   function (req, res) {
     // Successful authentication, redirect home.
-    console.log(res);
     res.redirect('http://localhost:3000/dashboard');
   }
 );

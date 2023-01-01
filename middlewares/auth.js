@@ -11,8 +11,6 @@ const GithubStrategy = require('passport-github2').Strategy;
 
 const { jwtCallback, googleCallback, githubCallBack } = require('../passport');
 
-app.use(passport.initialize());
-
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET,
