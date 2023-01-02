@@ -7,6 +7,9 @@ const Resource = require('../models/resources');
 const Tags = require('../models/tags');
 const Comment = require('../models/comments');
 
+// const auth = require('../services/auth');
+//const auth = require('../middlewares/auth');
+
 //create review
 router.post('/api/review/create', async (req, res) => {
   try {
@@ -24,7 +27,8 @@ router.post('/api/review/create', async (req, res) => {
       reviewPhotoLink: req.body.reviewPhotoLink,
       name: req.body.name,
       resourceName: resource.name,
-      resourceType: resource.resourceType,
+      category: resource.category,
+      categoryId: resource.categoryId,
       reviewBody: req.body.reviewBody,
       grade: req.body.grade,
       tags: tagsName,

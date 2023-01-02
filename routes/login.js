@@ -67,7 +67,7 @@ router.get(
   }),
   function (req, res) {
     // Successful authentication, redirect home.
-    res.redirect('http://localhost:3000/dashboard');
+    res.redirect('http://localhost:3000/');
   }
 );
 module.exports = router;

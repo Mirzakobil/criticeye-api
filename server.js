@@ -22,13 +22,15 @@ app.use(passport.session());
 app.use(passport.authenticate('session'));
 const PORT = process.env.PORT || 5000;
 
-const registerUser = require('./routes/registerUser');
 const resource = require('./routes/resource');
 const tag = require('./routes/tags');
+const categoryRouter = require('./routes/category');
 const review = require('./routes/review');
 const logIn = require('./routes/login');
+const userRouter = require('./routes/user');
+
 require('./database');
-const auth = require('./middlewares/auth');
+
 const logger = (req, res, next) => {
   console.log(
     `${new Date().toString()} - ${req.method} ${req.path} ${req.originalUrl}`
@@ -46,11 +48,13 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 app.use(logIn);
-app.use(registerUser);
 app.use(resource);
 app.use(tag);
-app.use('/rev', review);
+app.use(categoryRouter);
+app.use(review);
+app.use('/user', userRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

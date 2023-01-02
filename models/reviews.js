@@ -4,6 +4,7 @@ const reviewSchema = new mongoose.Schema(
   {
     authorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     resourceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Resource' },
+    categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
     reviewPhotoLink: [
       {
         type: String,
@@ -17,7 +18,7 @@ const reviewSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    resourceType: {
+    category: {
       type: String,
       required: true,
     },

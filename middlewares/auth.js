@@ -38,5 +38,5 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
-const auth = passport.authenticate('jwt', { session: false });
+const auth = passport.authenticate('jwt', { session: true });
 module.exports = auth;

@@ -6,7 +6,8 @@ const resourceSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    resourceType: String,
+    category: String,
+    categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
     resourcePhotoLink: {
       type: String,
     },
