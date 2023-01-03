@@ -23,6 +23,29 @@ router.post('/register', async (req, res) => {
   }
 });
 
+router.put('/update', async (req, res) => {
+  const userIds = req.body.ids;
+  for (id of userIds) {
+    await User.findByIdAndUpdate(
+      id,
+      {
+        email: req.body.email,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        profilePhotoLink: req.body.profilePhotoLink,
+      }
+      // (error, data) => {
+      //   if (error) {
+      //     console.log(error);
+      //   } else {
+      //     console.log(data);
+      //   }
+      // }
+    );
+  }
+  res.send('admin has been demoted to user');
+});
+
 router.put('/block', async (req, res) => {
   const userIds = req.body.ids;
   for (id of userIds) {

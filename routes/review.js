@@ -6,7 +6,6 @@ const Review = require('../models/reviews');
 const Resource = require('../models/resources');
 const Tags = require('../models/tags');
 const Comment = require('../models/comments');
-
 // const auth = require('../services/auth');
 //const auth = require('../middlewares/auth');
 
@@ -84,48 +83,6 @@ router.post('/api/review/like', async (req, res) => {
   }
 });
 
-//review comment create
-router.post('/api/review/comment', async (req, res) => {
-  try {
-    const userId = req.body.userId;
-    const reviewId = req.body.reviewId;
-    const comment = await Comment.create({
-      userId: userId,
-      reviewId: reviewId,
-      comment: req.body.comment,
-    });
-
-    return res.status(202).json(comment);
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json(err);
-  }
-});
-
-//get all user's comments
-router.get('/api/comment/getall/user/:userId', async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const comments = await Comment.find({ userId: userId });
-    return res.status(202).json(comments);
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json(err);
-  }
-});
-
-//get all review comments
-router.get('/api/comment/getall/review/:reviewId', async (req, res) => {
-  try {
-    const reviewId = req.params.reviewId;
-    const comment = await Comment.find({ reviewId });
-    return res.status(202).json(comment);
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json(err);
-  }
-});
-
 //get all resource reviews
 router.get('/api/review/getall/resource/:resourceId', async (req, res) => {
   try {
@@ -154,18 +111,6 @@ router.get('/api/review/getall/user/:userId', async (req, res) => {
 router.get('/api/review/getall/', async (req, res) => {
   try {
     const reviews = await Review.find();
-    return res.status(202).json(reviews);
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json(err);
-  }
-});
-
-//get all tag reviews
-router.get('/api/review/getall/tag/:tagId', async (req, res) => {
-  try {
-    const tagId = req.params.tagId;
-    const reviews = await Review.find({ tags: tagId });
     return res.status(202).json(reviews);
   } catch (err) {
     console.log(err);
@@ -230,8 +175,8 @@ router.delete('/review/delete', async (req, res) => {
       allResourceReviews.reduce((acc, item) => item.grade + acc, 0) /
       allResourceReviews.length;
   }
-
   await resource.save();
+  await Comment.deleteMany({ reviewId: reviewId });
   res.send('review deleted');
 });
 

@@ -28,7 +28,7 @@ const categoryRouter = require('./routes/category');
 const review = require('./routes/review');
 const logIn = require('./routes/login');
 const userRouter = require('./routes/user');
-
+const commentsRouter = require('./routes/comments');
 require('./database');
 
 const logger = (req, res, next) => {
@@ -55,6 +55,7 @@ app.use(tag);
 app.use(categoryRouter);
 app.use(review);
 app.use('/user', userRouter);
+app.use(commentsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
