@@ -36,17 +36,17 @@ router.get('/category/getall', async (req, res) => {
   }
 });
 
-router.put('/category/update', (req, res) => {
-  Category.findByIdAndUpdate(
+router.put('/category/update', async (req, res) => {
+  await Category.findByIdAndUpdate(
     req.body.categoryId,
-    { name: req.body.name },
-    (error, data) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(data);
-      }
-    }
+    { name: req.body.name }
+    // (error, data) => {
+    //   if (error) {
+    //     console.log(error);
+    //   } else {
+    //     console.log(data);
+    //   }
+    // }
   );
   res.send('category has been updated');
 });

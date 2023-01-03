@@ -161,6 +161,18 @@ router.get('/api/review/getall/', async (req, res) => {
   }
 });
 
+//get all tag reviews
+router.get('/api/review/getall/tag/:tagId', async (req, res) => {
+  try {
+    const tagId = req.params.tagId;
+    const reviews = await Review.find({ tags: tagId });
+    return res.status(202).json(reviews);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
 //get one review by id
 router.get('/review/:reviewId', async (req, res) => {
   try {
@@ -175,16 +187,52 @@ router.get('/review/:reviewId', async (req, res) => {
   }
 });
 
-//get all tag reviews
-router.get('/api/review/getall/tag/:tagId', async (req, res) => {
-  try {
-    const tagId = req.params.tagId;
-    const reviews = await Review.find({ tags: tagId });
-    return res.status(202).json(reviews);
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json(err);
+router.put('/review/update', async (req, res) => {
+  await Review.findByIdAndUpdate(
+    req.body.reviewId,
+    {
+      name: req.body.name,
+      reviewBody: req.body.reviewBody,
+      reviewPhotoLink: req.body.reviewPhotoLink,
+      grade: req.body.grade,
+    }
+    // (error, data) => {
+    //   if (error) {
+    //     console.log(error);
+    //   } else {
+    //     console.log(data);
+    //   }
+    // }
+  );
+  const resourceId = req.body.resourceId;
+  const resource = await Resource.findById(resourceId);
+  const allResourceReviews = await Review.find({ resourceId });
+
+  resource.grade =
+    allResourceReviews.reduce((acc, item) => item.grade + acc, 0) /
+    allResourceReviews.length;
+
+  await resource.save();
+
+  res.send('review has been updated');
+});
+
+router.delete('/review/delete', async (req, res) => {
+  const reviewId = req.body.reviewId;
+  await Review.findByIdAndRemove(reviewId);
+  const resourceId = req.body.resourceId;
+  const resource = await Resource.findById(resourceId);
+  const allResourceReviews = await Review.find({ resourceId });
+  if (allResourceReviews.length == 0) {
+    resource.grade = 0;
+  } else {
+    resource.grade =
+      allResourceReviews.reduce((acc, item) => item.grade + acc, 0) /
+      allResourceReviews.length;
   }
+
+  await resource.save();
+  res.send('review deleted');
 });
 
 module.exports = router;

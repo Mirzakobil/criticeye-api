@@ -25,21 +25,21 @@ router.post('/api/resource/create', async (req, res) => {
   }
 });
 
-router.put('/resource/update', (req, res) => {
-  Resource.findByIdAndUpdate(
+router.put('/resource/update', async (req, res) => {
+  await Resource.findByIdAndUpdate(
     req.body.resourceId,
     {
       name: req.body.name,
       resourcePhotoLink: req.body.resourcePhotoLink,
       categoryId: req.body.categoryId,
-    },
-    (error, data) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(data);
-      }
     }
+    // (error, data) => {
+    //   if (error) {
+    //     console.log(error);
+    //   } else {
+    //     console.log(data);
+    //   }
+    // }
   );
   res.send('resource has been updated');
 });

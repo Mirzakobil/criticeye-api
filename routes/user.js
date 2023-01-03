@@ -23,58 +23,74 @@ router.post('/register', async (req, res) => {
   }
 });
 
-router.put('/block', (req, res) => {
+router.put('/block', async (req, res) => {
   const userIds = req.body.ids;
   for (id of userIds) {
-    User.findByIdAndUpdate(id, { status: 'blocked' }, (error, data) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(data);
-      }
-    });
+    await User.findByIdAndUpdate(
+      id,
+      { status: 'blocked' }
+      // (error, data) => {
+      //   if (error) {
+      //     console.log(error);
+      //   } else {
+      //     console.log(data);
+      //   }
+      // }
+    );
   }
   res.send('users blocked');
 });
 
-router.put('/unblock', (req, res) => {
+router.put('/unblock', async (req, res) => {
   const userIds = req.body.ids;
   for (id of userIds) {
-    User.findByIdAndUpdate(id, { status: 'active' }, (error, data) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(data);
-      }
-    });
+    await User.findByIdAndUpdate(
+      id,
+      { status: 'active' }
+      // (error, data) => {
+      //   if (error) {
+      //     console.log(error);
+      //   } else {
+      //     console.log(data);
+      //   }
+      // }
+    );
   }
   res.send('user unblocked');
 });
 
-router.put('/makeAdmin', (req, res) => {
+router.put('/makeAdmin', async (req, res) => {
   const userIds = req.body.ids;
   for (id of userIds) {
-    User.findByIdAndUpdate(id, { role: 'admin' }, (error, data) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(data);
-      }
-    });
+    await User.findByIdAndUpdate(
+      id,
+      { role: 'admin' }
+      //  (error, data) => {
+      //   if (error) {
+      //     console.log(error);
+      //   } else {
+      //     console.log(data);
+      //   }
+      // }
+    );
   }
   res.send('user has been promoted to admin');
 });
 
-router.put('/makeUser', (req, res) => {
+router.put('/makeUser', async (req, res) => {
   const userIds = req.body.ids;
   for (id of userIds) {
-    User.findByIdAndUpdate(id, { role: 'user' }, (error, data) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(data);
-      }
-    });
+    await User.findByIdAndUpdate(
+      id,
+      { role: 'user' }
+      // (error, data) => {
+      //   if (error) {
+      //     console.log(error);
+      //   } else {
+      //     console.log(data);
+      //   }
+      // }
+    );
   }
   res.send('admin has been demoted to user');
 });
