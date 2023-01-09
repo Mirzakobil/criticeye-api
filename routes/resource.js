@@ -103,7 +103,7 @@ router.post('/api/resource/addUserRating', async (req, res) => {
       allResourceRatings.reduce((acc, item) => item.rating + acc, 0) /
       allResourceRatings.length;
     resource.rating = avrRating;
-    review.ratingAvr = avrRating;
+
     const revRating = {
       userId,
       rating,

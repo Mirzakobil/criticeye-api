@@ -2,16 +2,23 @@ const express = require('express');
 
 const router = express.Router();
 const Comment = require('../models/comments');
+const Review = require('../models/reviews');
+const User = require('../models/users');
 
 //review comment create
 router.post('/api/review/comment', async (req, res) => {
   try {
     const userId = req.body.userId;
     const reviewId = req.body.reviewId;
+    const author = await User.findById(userId);
+    const resource = await Review.findById(reviewId);
+    console.log(author);
     const comment = await Comment.create({
       userId: userId,
       reviewId: reviewId,
       comment: req.body.comment,
+      authorName: author.firstName,
+      resourceName: resource.resourceName,
     });
 
     return res.status(202).json(comment);
@@ -45,6 +52,17 @@ router.get('/api/comment/getall/review/:reviewId', async (req, res) => {
   }
 });
 
+//get all comments
+router.get('/api/comment/getall/', async (req, res) => {
+  try {
+    const comment = await Comment.find();
+    return res.status(202).json(comment);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
 router.put('/comment/update', async (req, res) => {
   await Comment.findByIdAndUpdate(
     req.body.commentId,
@@ -60,9 +78,12 @@ router.put('/comment/update', async (req, res) => {
   res.send('comment has been updated');
 });
 
-router.delete('/comment/delete/:commentId', async (req, res) => {
-  const commentId = req.params.commentId;
-  await Comment.findByIdAndRemove(commentId);
+router.delete('/comment/delete/', async (req, res) => {
+  const ids = req.body.commentIds;
+  for (id of ids) {
+    await Comment.findByIdAndRemove(id);
+  }
+
   res.send('comment deleted');
 });
 

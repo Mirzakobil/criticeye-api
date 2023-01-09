@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Category = require('../models/category');
+const Review = require('../models/reviews');
 
 router.post('/category/create', async (req, res) => {
   try {
@@ -30,6 +31,18 @@ router.get('/category/getall', async (req, res) => {
   try {
     const categories = await Category.find();
     return res.status(202).json(categories);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+//get all category reviews
+router.get('/category/getall/review/:categoryId', async (req, res) => {
+  try {
+    const categoryId = req.params.categoryId;
+    const reviews = await Review.find({ categoryId });
+    return res.status(202).json(reviews);
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);

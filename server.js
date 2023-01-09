@@ -30,7 +30,7 @@ const logIn = require('./routes/login');
 const userRouter = require('./routes/user');
 const commentsRouter = require('./routes/comments');
 require('./database');
-
+require('./middlewares/auth');
 const logger = (req, res, next) => {
   console.log(
     `${new Date().toString()} - ${req.method} ${req.path} ${req.originalUrl}`

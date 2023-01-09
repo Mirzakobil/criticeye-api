@@ -6,6 +6,7 @@ const Review = require('../models/reviews');
 const Resource = require('../models/resources');
 const Tags = require('../models/tags');
 const Comment = require('../models/comments');
+const User = require('../models/users');
 // const auth = require('../services/auth');
 //const auth = require('../middlewares/auth');
 
@@ -13,7 +14,9 @@ const Comment = require('../models/comments');
 router.post('/api/review/create', async (req, res) => {
   try {
     const resourceId = req.body.resourceId;
+    const userId = req.body.authorId;
     const resource = await Resource.findById(resourceId);
+    const author = await User.findById(userId);
     const tagsIds = req.body.tags;
     const tagsName = [];
     for (id of tagsIds) {
@@ -23,6 +26,7 @@ router.post('/api/review/create', async (req, res) => {
     const review = await Review.create({
       authorId: req.body.authorId,
       resourceId: resourceId,
+      authorName: author.firstName,
       reviewPhotoLink: req.body.reviewPhotoLink,
       name: req.body.name,
       resourceName: resource.name,

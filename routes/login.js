@@ -16,6 +16,16 @@ router.get('/login/success', (req, res) => {
     });
   }
 });
+
+router.get('/logout', (req, res, next) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('http://localhost:3000/');
+  });
+});
+
 router.post('/api/login', async (req, res) => {
   const user = await data.loginUser(req.body.email, req.body.password);
 
@@ -31,7 +41,7 @@ router.post('/api/login', async (req, res) => {
     });
 
     res.status(200).json({
-      id: user.id,
+      _id: user.id,
       email: user.email,
       role: user.role,
       token: `${token}`,
@@ -48,7 +58,9 @@ router.get(
 
 router.get(
   '/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', {
+    failureRedirect: 'http://localhost:3000/login',
+  }),
   function (req, res) {
     // Successful authentication, redirect home.
     //console.log(req.user);

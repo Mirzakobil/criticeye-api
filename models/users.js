@@ -6,11 +6,12 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       unique: true,
-      required: true,
     },
     password: {
       type: String,
-      default: bcrypt.hash('0', 10),
+    },
+    githubId: {
+      type: String,
     },
     role: String,
     firstName: {
@@ -19,7 +20,6 @@ const userSchema = new mongoose.Schema(
     },
     lastName: {
       type: String,
-      required: true,
     },
     profilePhotoLink: {
       type: String,
