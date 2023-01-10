@@ -44,10 +44,13 @@ router.put('/resource/update', async (req, res) => {
   res.send('resource has been updated');
 });
 
-router.delete('/resource/delete/:resourceId', async (req, res) => {
-  const resourceId = req.params.resourceId;
-  await Resource.findByIdAndRemove(resourceId);
-  res.send('resource deleted');
+router.delete('/resource/delete/', async (req, res) => {
+  const ids = req.body.resourceIds;
+  for (id of ids) {
+    await Resource.findByIdAndRemove(id);
+  }
+
+  res.send('Resource deleted');
 });
 
 router.get('/resource/getOne/:resourceId', async (req, res) => {
@@ -55,6 +58,18 @@ router.get('/resource/getOne/:resourceId', async (req, res) => {
     const resourceId = req.params.resourceId;
     const resource = await Resource.findById(resourceId);
     return res.status(202).json(resource);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+//get all resource ratings
+router.get('/rating/getall/resource/:resourceId', async (req, res) => {
+  try {
+    const resourceId = req.params.resourceId;
+    const ratings = await Rating.find({ resourceId });
+    return res.status(202).json(ratings);
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);

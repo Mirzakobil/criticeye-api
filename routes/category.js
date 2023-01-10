@@ -64,9 +64,12 @@ router.put('/category/update', async (req, res) => {
   res.send('category has been updated');
 });
 
-router.delete('/category/delete/:categoryId', async (req, res) => {
-  const categoryId = req.params.categoryId;
-  await Category.findByIdAndRemove(categoryId);
+router.delete('/category/delete/', async (req, res) => {
+  const ids = req.body.categoryIds;
+  for (id of ids) {
+    await Category.findByIdAndRemove(id);
+  }
+
   res.send('category deleted');
 });
 

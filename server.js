@@ -41,7 +41,7 @@ const logger = (req, res, next) => {
 app.use(logger);
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://criticeye.onrender.com',
     methods: 'GET,POST,PUT,DELETE',
     credentials: true,
   })

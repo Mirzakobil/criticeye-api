@@ -22,7 +22,7 @@ router.get('/logout', (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect('http://localhost:3000/');
+    res.redirect('https://criticeye.onrender.com/');
   });
 });
 
@@ -59,12 +59,12 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    failureRedirect: 'http://localhost:3000/login',
+    failureRedirect: 'https://criticeye.onrender.com/login',
   }),
   function (req, res) {
     // Successful authentication, redirect home.
     //console.log(req.user);
-    res.redirect('http://localhost:3000/');
+    res.redirect('https://criticeye.onrender.com/');
   }
 );
 router.get(
@@ -75,11 +75,11 @@ router.get(
 router.get(
   '/github/callback',
   passport.authenticate('github', {
-    failureRedirect: 'http://localhost:3000/login',
+    failureRedirect: 'https://criticeye.onrender.com/login',
   }),
   function (req, res) {
     // Successful authentication, redirect home.
-    res.redirect('http://localhost:3000/');
+    res.redirect('https://criticeye.onrender.com/');
   }
 );
 module.exports = router;

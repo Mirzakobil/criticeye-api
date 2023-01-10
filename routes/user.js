@@ -25,24 +25,23 @@ router.post('/register', async (req, res) => {
 
 router.put('/update', async (req, res) => {
   const userIds = req.body.ids;
-  for (id of userIds) {
-    await User.findByIdAndUpdate(
-      id,
-      {
-        email: req.body.email,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        profilePhotoLink: req.body.profilePhotoLink,
-      }
-      // (error, data) => {
-      //   if (error) {
-      //     console.log(error);
-      //   } else {
-      //     console.log(data);
-      //   }
-      // }
-    );
-  }
+
+  await User.findByIdAndUpdate(
+    id,
+    {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      profilePhotoLink: req.body.profilePhotoLink,
+    }
+    // (error, data) => {
+    //   if (error) {
+    //     console.log(error);
+    //   } else {
+    //     console.log(data);
+    //   }
+    // }
+  );
+
   res.send('admin has been demoted to user');
 });
 
@@ -130,6 +129,19 @@ router.get('/getall', async (req, res) => {
   try {
     const users = await User.find();
     return res.status(202).json(users);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+//get one user by id
+router.get('/getOne/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+
+    return res.status(202).json(user);
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);

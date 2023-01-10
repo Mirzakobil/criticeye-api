@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Tags = require('../models/tags');
+const Review = require('../models/reviews');
 
 router.post('/api/tags/create', async (req, res) => {
   try {
@@ -26,11 +27,24 @@ router.get('/tags/getall/', async (req, res) => {
   }
 });
 
+//get one tag by id
+router.get('/tag/:tagId', async (req, res) => {
+  try {
+    const tagId = req.params.tagId;
+    const tag = await Tags.findById(tagId);
+
+    return res.status(202).json(tag);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
 //get all tag reviews
 router.get('/api/review/getall/tag/:tagId', async (req, res) => {
   try {
     const tagId = req.params.tagId;
-    const reviews = await Review.find({ tags: tagId });
+    const reviews = await Review.find({ tagId: tagId });
     return res.status(202).json(reviews);
   } catch (err) {
     console.log(err);

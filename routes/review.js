@@ -136,11 +136,24 @@ router.get('/review/:reviewId', async (req, res) => {
   }
 });
 
+//get one review likes number
+router.get('/reviewLikes/:reviewId', async (req, res) => {
+  try {
+    const reviewId = req.params.reviewId;
+    const review = await Review.findById(reviewId);
+
+    return res.status(202).json(review.likes);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
 router.put('/review/update', async (req, res) => {
   await Review.findByIdAndUpdate(
     req.body.reviewId,
     {
-      name: req.body.name,
+      name: req.body.reviewName,
       reviewBody: req.body.reviewBody,
       reviewPhotoLink: req.body.reviewPhotoLink,
       grade: req.body.grade,
@@ -167,20 +180,26 @@ router.put('/review/update', async (req, res) => {
 });
 
 router.delete('/review/delete', async (req, res) => {
-  const reviewId = req.body.reviewId;
-  await Review.findByIdAndRemove(reviewId);
-  const resourceId = req.body.resourceId;
-  const resource = await Resource.findById(resourceId);
-  const allResourceReviews = await Review.find({ resourceId });
-  if (allResourceReviews.length == 0) {
-    resource.grade = 0;
-  } else {
-    resource.grade =
-      allResourceReviews.reduce((acc, item) => item.grade + acc, 0) /
-      allResourceReviews.length;
+  const ids = req.body.reviewIds;
+
+  for (id of ids) {
+    const review = await Review.findById(id);
+
+    await Review.findByIdAndRemove(id);
+    const resourceId = review.resourceId;
+    const resource = await Resource.findById(resourceId);
+    const allResourceReviews = await Review.find({ resourceId });
+    if (allResourceReviews.length == 0) {
+      resource.grade = 0;
+    } else {
+      resource.grade =
+        allResourceReviews.reduce((acc, item) => item.grade + acc, 0) /
+        allResourceReviews.length;
+    }
+    await resource.save();
+    await Comment.deleteMany({ reviewId: id });
   }
-  await resource.save();
-  await Comment.deleteMany({ reviewId: reviewId });
+
   res.send('review deleted');
 });
 
